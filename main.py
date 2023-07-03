@@ -20,7 +20,7 @@ def get_tasks_pes():
     test_list.append(Task('T6', global_deadline + 10, {'P0':4 , 'P1':4}, {'T5':3}))
 
     pe_list = []
-    pe_list.append(ProccessorElement('P0', [1, 0.5]))
+    pe_list.append(ProccessorElement('P0', [1, 0.5, 0.5]))
     pe_list.append(ProccessorElement('P1', [1, 0.5, 0.4]))
 
     return (test_list, pe_list)
@@ -47,18 +47,25 @@ def test_schedule_generator():
     schedule_generator = ScheduleGenerator(tasks, pe_list)
     individualGenerator = IndividualGenerator([len(p.frequency_list) for p in pe_list], len(tasks))
 
-    individual = individualGenerator.generate_random()
-    t_s = schedule_generator.generate_scheduler_from_individual(individual)
+    individual_a = individualGenerator.generate_random()
+    print(f"\n individual_a = {individual_a}")
+    schedule_generator.generate_scheduler_from_individual(individual_a).print()
 
-    print(individual)
-    t_s.print()
+    individual_b = individualGenerator.generate_random()
+    print(f"\n individual_b = {individual_b}")
+    schedule_generator.generate_scheduler_from_individual(individual_b).print()
 
-    m_individual = individualGenerator.mutate(individual)
-    m_t_s = schedule_generator.generate_scheduler_from_individual(m_individual)
+    cross_individual_a , cross_individual_b = IndividualGenerator.crossover(individual_a, individual_b)
+    
+    print(f"\n cross_individual_a = {cross_individual_a}")
+    schedule_generator.generate_scheduler_from_individual(cross_individual_a).print()
 
-    print("\n\n")
-    print(m_individual)
-    m_t_s.print()
+    print(f"\n cross_individual_b = {cross_individual_b}")
+    schedule_generator.generate_scheduler_from_individual(cross_individual_b).print()
+
+    mutate_cross_individual_b = individualGenerator.mutate(cross_individual_b)
+    print(f"\n mutate_cross_individual_b = {mutate_cross_individual_b}")
+    schedule_generator.generate_scheduler_from_individual(mutate_cross_individual_b).print()
 
 def main():
     # test_scheduler()

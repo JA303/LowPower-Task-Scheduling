@@ -19,7 +19,7 @@ class ProccessorElement:
 
 
     def schedule(self) -> list[Task]:
-        self.assignment_list.sort(key=lambda t: t.frequency_index)
+        self.assignment_list.sort(key=lambda t: (t.frequency_index, t.task.get_execution_time(self.name)))
         self.task_timeline = Timeline()
         miss_deadline_tasks = []
         

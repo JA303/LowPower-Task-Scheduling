@@ -54,6 +54,16 @@ class IndividualGenerator:
         mutate_individual.dna[random_index] = new_value
         return mutate_individual
     
+    def crossover(individual_a : Individual, individual_b : Individual) -> tuple[Individual, Individual]:
+        intersection_index = random.randint(0, len(individual_a.dna) - 2) + 1
+        cross_individual_a = deepcopy(individual_a)
+        cross_individual_b = deepcopy(individual_b)
+
+        cross_individual_a.dna[intersection_index : -1] = individual_b.dna[intersection_index : -1]
+        cross_individual_b.dna[intersection_index : -1] = individual_a.dna[intersection_index : -1]
+        
+        return (cross_individual_a, cross_individual_b)
+    
 class ScheduleGenerator:
     def __init__(self, task_list : list[Task], pe_list : list[ProccessorElement]) -> None:
         self.task_list = task_list
