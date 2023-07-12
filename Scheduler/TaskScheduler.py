@@ -3,7 +3,7 @@ from .CommunicationElement import *
 from .TaskAssignment import *
 
 class TaskScheduler:
-    def __init__(self, pe_list : list[ProccessorElement]) -> None:
+    def __init__(self, pe_list : list[ProcessorElement]) -> None:
         self.pe_list = pe_list
         self.ce = CommunicationElement()
 
@@ -15,13 +15,21 @@ class TaskScheduler:
     def schedule(self):
         self.communication_requests = []
         self.miss_deadline = []
+        self.end_time = 0.0
 
         for pe in self.pe_list:
             miss_tasks = pe.schedule()
             self.miss_deadline.extend(miss_tasks)
             self.communication_requests.extend(pe.get_communication_requests())
             
+            pe_end_time = pe.task_timeline.timeline_length
+            if pe_end_time > self.end_time: self.end_time = pe_end_time
+        
+            
         self.ce.schedule(self.communication_requests)
+        
+        ce_end_time = self.ce.timeline.timeline_length
+        if ce_end_time > self.end_time: self.end_time = ce_end_time
     
     def is_miss_deadline(self) -> bool:
         return len(self.miss_deadline) > 0
@@ -31,7 +39,7 @@ class TaskScheduler:
         for pe in self.pe_list:
             print(f"PE name : {pe.name}")
             print(pe.task_timeline)
-            print("execute frequancy list:" + ''.join([ str(pe.frequency_list[a.frequency_index]) + ', ' for a in pe.assignment_list]) + "\n")
+            print("execute frequency list:" + ''.join([ str(pe.frequency_list[a.frequency_index]) + ', ' for a in pe.assignment_list]) + "\n")
             
         print("\n****** Miss Deadline Tasks ******")
         print(''.join([f"{m.name}(deadline={m.deadline}), " for m in self.miss_deadline]))

@@ -65,7 +65,7 @@ class IndividualGenerator:
         return (cross_individual_a, cross_individual_b)
     
 class ScheduleGenerator:
-    def __init__(self, task_list : list[Task], pe_list : list[ProccessorElement]) -> None:
+    def __init__(self, task_list : list[Task], pe_list : list[ProcessorElement]) -> None:
         self.task_list = task_list
         self.pe_list = pe_list
 

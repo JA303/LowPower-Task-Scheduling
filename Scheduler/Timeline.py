@@ -34,6 +34,12 @@ class Timeline:
         time_p = self.timeline[t]
         return time_p.end_time - time_p.start_time
     
+    def get_all_duration_time(self) -> float:
+        time = 0.0
+        for task, t in self.timeline.items():
+            time += t.end_time - t.start_time
+
+        return time
     
     def __str__(self) -> str:
         str = "(TimeLine="

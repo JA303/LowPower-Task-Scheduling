@@ -39,4 +39,7 @@ class CommunicationElement:
                 delay = new_time - current_time
                 current_time = new_time
                 curr_req_list = [r for r in not_selected_reqs if r.request_time <= current_time]
+
+    def get_energy(self, communication_power : float) -> float:
+        return self.timeline.get_all_duration_time() * communication_power
     

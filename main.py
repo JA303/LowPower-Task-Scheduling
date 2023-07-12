@@ -7,6 +7,7 @@ from Scheduler.TaskAssignment import *
 from Scheduler.TaskScheduler import *
 from Scheduler.ProccessorElement import *
 from Scheduler.Individual import *
+from Scheduler.Fitness import *
 
 def get_tasks_pes():
     test_list = []
@@ -20,8 +21,8 @@ def get_tasks_pes():
     test_list.append(Task('T6', global_deadline + 10, {'P0':4 , 'P1':4}, {'T5':3}))
 
     pe_list = []
-    pe_list.append(ProccessorElement('P0', [1, 0.5, 0.5]))
-    pe_list.append(ProccessorElement('P1', [1, 0.5, 0.4]))
+    pe_list.append(ProcessorElement('P0', [(1000, 5) , (500, 3), (100, 1)]))
+    pe_list.append(ProcessorElement('P1', [(1000, 5), (400, 3), (200, 1)]))
 
     return (test_list, pe_list)
 
@@ -67,10 +68,23 @@ def test_schedule_generator():
     print(f"\n mutate_cross_individual_b = {mutate_cross_individual_b}")
     schedule_generator.generate_scheduler_from_individual(mutate_cross_individual_b).print()
 
+def test_energy_calcutation():
+    tasks , pe_list = get_tasks_pes()
+    schedule_generator = ScheduleGenerator(tasks, pe_list)
+    individualGenerator = IndividualGenerator([len(p.frequency_list) for p in pe_list], len(tasks))
+    fitness = Fitness(10, 10, [1, 2], 4, 2)
+
+    individual_random = individualGenerator.generate_random()
+    schedule = schedule_generator.generate_scheduler_from_individual(individual_random)
+    print(individual_random)
+    schedule.print()
+    fitness.print(schedule)
+
 def main():
     # test_scheduler()
     # test_genetic_algorithm()
     test_schedule_generator()
+    test_energy_calcutation()
 
 if __name__ == '__main__':
     main()

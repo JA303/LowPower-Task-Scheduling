@@ -2,12 +2,15 @@ from .TaskAssignment import *
 from .Timeline import *
 from .CommunicationRequest import *
 
-class ProccessorElement:
-    def __init__(self, name : str, frequency_list : list[float]):
+class ProcessorElement:
+    def __init__(self, name : str, frequency_voltage_list : list[tuple[float, float]]):
         self.name = name
-        self.frequency_list = frequency_list
-        self.base_frequency = frequency_list[0]
         self.task_timeline = Timeline()
+
+        frequency_voltage_list.sort(key= lambda t: t[0], reverse=True)
+        self.frequency_list, self.voltage_list = list(map(list, zip(*frequency_voltage_list)))
+        self.base_frequency = self.frequency_list[0]
+        
 
     def assign(self, assignment_list : list[TaskAssignment]):
         self.verify_assignments(self.name, assignment_list)
@@ -19,7 +22,7 @@ class ProccessorElement:
 
 
     def schedule(self) -> list[Task]:
-        self.assignment_list.sort(key=lambda t: (t.frequency_index, t.task.get_execution_time(self.name)))
+        self.assignment_list.sort(key=lambda t: (t.frequency_index, t.task.deadline))
         self.task_timeline = Timeline()
         miss_deadline_tasks = []
         
@@ -49,6 +52,28 @@ class ProccessorElement:
                 result.append(newReq)
         
         return result
+    
+    def get_dynamic_energy(self, efficient_capacity : float) -> float:
+        energy = 0.0
+        for i, assignment in enumerate(self.assignment_list):
+            executuin_frequency = self.frequency_list[assignment.frequency_index]
+            executuin_voltage = self.voltage_list[assignment.frequency_index]
+            duration =  self.task_timeline.get_duration_time(assignment.task)
+            energy = energy + (efficient_capacity * executuin_frequency * pow(executuin_voltage, 2)) * duration
+        return energy
+    
+    def get_transition_energy(self, voltage_rail_capacity : float) -> float:
+        energy = 0.0
+        previous_voltage = self.voltage_list[0]
+        for i, assignment in enumerate(self.assignment_list):
+            executuin_voltage = self.voltage_list[assignment.frequency_index]
+            energy = energy + (voltage_rail_capacity * pow(abs(previous_voltage - executuin_voltage) , 2))
+            previous_voltage = executuin_voltage
+
+        return energy + (voltage_rail_capacity * pow(abs(previous_voltage - self.voltage_list[0]) , 2))
+    
+    def get_idle_energy(self, idle_power : float, end_time : float) -> float:
+        return (end_time - self.task_timeline.timeline_length) * idle_power
     
     def __str__(self) -> str:
         pass
