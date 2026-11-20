@@ -1,7 +1,7 @@
-from .Task import *
+"""
+Legacy compatibility wrapper for TaskAssignment.
+"""
 
-class TaskAssignment:    
-    def __init__(self, task : Task, pe_name : str, frequency_index : int):
-        self.task = task
-        self.pe_name = pe_name
-        self.frequency_index = frequency_index
+from lowpower_scheduler.models.assignment import TaskAssignment
+
+__all__ = ["TaskAssignment"]

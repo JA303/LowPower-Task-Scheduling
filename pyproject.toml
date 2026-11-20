@@ -1,0 +1,65 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "lowpower-task-scheduling"
+version = "1.0.0"
+description = "Energy-Aware Heterogeneous Multi-Core Task Scheduling with DVFS and Genetic Algorithm Optimization."
+readme = "README.md"
+requires-python = ">=3.8"
+license = { text = "MIT" }
+authors = [
+    { name = "JA303", email = "sheikholeslam.mashhad@gmail.com" }
+]
+keywords = [
+    "task-scheduling",
+    "dvfs",
+    "low-power",
+    "energy-efficient",
+    "heterogeneous-multicore",
+    "genetic-algorithm",
+    "solid",
+    "design-patterns",
+    "dag-scheduling",
+    "embedded-systems"
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Science/Research",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering",
+    "Topic :: System :: Hardware :: Multiprocessors",
+    "Topic :: Software Development :: Libraries :: Python Modules"
+]
+dependencies = []
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-cov>=4.0.0",
+    "black>=23.0.0",
+    "flake8>=6.0.0",
+    "mypy>=1.0.0"
+]
+vis = [
+    "matplotlib>=3.5.0",
+    "numpy>=1.20.0"
+]
+
+[project.urls]
+Homepage = "https://github.com/JA303/LowPower-Task-Scheduling"
+Repository = "https://github.com/JA303/LowPower-Task-Scheduling.git"
+"Bug Tracker" = "https://github.com/JA303/LowPower-Task-Scheduling/issues"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["lowpower_scheduler*", "Scheduler*"]
